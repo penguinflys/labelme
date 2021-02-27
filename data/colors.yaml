@@ -1,0 +1,10 @@
+shift_auto_shape_color: -2
+shape_color: manual
+label_colors: 
+  CAR: [255, 255, 0]
+  BUILDING: [0, 0, 255]
+  TREE: [0, 255, 0]
+  CLUTTER: [255, 0, 0]
+  LOW_VEGETATION: [0, 255, 255]
+  IMPRIOUS_SURFACE: [255, 255, 255]
+  _background_: [0, 0, 0]

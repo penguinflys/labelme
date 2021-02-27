@@ -1,0 +1,40 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: launch Labelme",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/labelme/__main__.py",
+            "console": "integratedTerminal",
+            "args": [
+                "data/images/aerial_example.tif",
+                "--labels",
+                "data/labels.txt",
+                "--nodata",
+                "--validatelabel",
+                "exact",
+                "--config",
+                "data/config.yaml",
+            ]
+        },
+        {
+            "name": "Python: convert to image",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/data/labelme2voc.py",
+            "console": "integratedTerminal",
+            "args": [
+                "data/annotated",
+                "data/voc",
+                "--labels",
+                "data/labels.txt",
+                "--config",
+                "data/colors.yaml",
+            ]
+        }
+    ]
+}

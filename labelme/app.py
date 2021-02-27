@@ -23,7 +23,8 @@ from labelme.label_file import LabelFile
 from labelme.label_file import LabelFileError
 from labelme.logger import logger
 from labelme.shape import Shape
-from labelme.widgets import BrightnessContrastDialog
+from labelme.widgets import BrightnessContrastDialog, digital_surface_dialog
+from labelme.widgets import DigitalSurfaceDialog
 from labelme.widgets import Canvas
 from labelme.widgets import LabelDialog
 from labelme.widgets import LabelListWidget
@@ -499,6 +500,14 @@ class MainWindow(QtWidgets.QMainWindow):
             checkable=True,
             enabled=False,
         )
+        digitalSurface = action(
+            "&Digital Surface Slice",
+            self.surfaceSlice,
+            None,
+            "color",
+            "Adjust brightness and contrast",
+            enabled=False,
+        )
         brightnessContrast = action(
             "&Brightness Contrast",
             self.brightnessContrast,
@@ -585,6 +594,7 @@ class MainWindow(QtWidgets.QMainWindow):
             fitWindow=fitWindow,
             fitWidth=fitWidth,
             brightnessContrast=brightnessContrast,
+            digitalSurface=digitalSurface,
             zoomActions=zoomActions,
             openNextImg=openNextImg,
             openPrevImg=openPrevImg,
@@ -630,6 +640,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 createLineStripMode,
                 editMode,
                 brightnessContrast,
+                digitalSurface,
             ),
             onShapesPresent=(saveAs, hideAll, showAll),
         )
@@ -687,6 +698,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 fitWidth,
                 None,
                 brightnessContrast,
+                digitalSurface,
             ),
         )
 
@@ -718,6 +730,7 @@ class MainWindow(QtWidgets.QMainWindow):
             delete,
             undo,
             brightnessContrast,
+            digitalSurface,
             None,
             zoom,
             fitWidth,
@@ -1384,6 +1397,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.loadPixmap(
             QtGui.QPixmap.fromImage(qimage), clear_shapes=False
         )
+
+    def surfaceSlice(self):
+        dialog = BrightnessContrastDialog(
+            utils.img_data_to_pil(self.imageData),
+            self.onNewBrightnessContrast,
+            parent=self,
+        )
+        brightness, contrast = self.brightnessContrast_values.get(
+            self.filename, (None, None)
+        )
+        if brightness is not None:
+            dialog.slider_brightness.setValue(brightness)
+        if contrast is not None:
+            dialog.slider_contrast.setValue(contrast)
+        dialog.exec_()
+
+        brightness = dialog.slider_brightness.value()
+        contrast = dialog.slider_contrast.value()
+        self.brightnessContrast_values[self.filename] = (brightness, contrast)
 
     def brightnessContrast(self, value):
         dialog = BrightnessContrastDialog(

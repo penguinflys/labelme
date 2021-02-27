@@ -1,0 +1,7 @@
+_background_
+imprevious
+building
+low_vegetation
+tree
+car
+clutter
